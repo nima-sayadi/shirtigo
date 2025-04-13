@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+/* Make text look crisper and more legible in all browsers */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    margin: 0;
+    background-color: var(--color--surface-2);
+    color: var(--color--text);
+    font-family: Nunito Sans, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    min-height: 100%;
+}
+
+h1 {
+    color: var(--color--headline);
+    font-size: var(--text-size--xhuge);
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+h2 {
+    color: var(--color--headline);
+    font-size: var(--text-size--huge);
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 900;
+    line-height: 1.2;
+}
+  
+h3 {
+    color: var(--color--headline);
+    font-size: var(--text-size--xxlarge);
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 800;
+    line-height: 1.2;
+}
+  
+h4 {
+    color: var(--color--headline);
+    font-size: var(--text-size--xlarge);
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+h5 {
+    font-size: var(--text-size--large);
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+h6 {
+    font-size: .875rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 700;
+    line-height: 1.5;
+}
+  
+/* Focus state style for keyboard navigation for the focusable elements */
+*[tabindex]:focus-visible,
+input[type="file"]:focus-visible {
+    outline: 0.125rem solid #4d65ff;
+    outline-offset: 0.125rem;
+}
+
+/* User can resize the textarea vertical only */
+textarea {  
+    resize: vertical;
+}
+
+a,
+.w-input,
+.w-select,
+.w-tab-link,
+.w-nav-link,
+.w-dropdown-btn,
+.w-dropdown-toggle,
+.w-dropdown-link {
+    color: inherit;
+    text-decoration: inherit;
+    font-size: inherit;
+}
