@@ -98,3 +98,9 @@ a,
     text-decoration: inherit;
     font-size: inherit;
 }
+
+label {
+    margin-bottom: var(--space--xxsmall);
+    font-weight: 500;
+    display: block;
+}

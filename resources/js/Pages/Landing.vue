@@ -7,7 +7,20 @@
                         <CardTitle title="1. Product" />
                         <SpacerDiv />
                         <div class="form_component w-form">
-                            <div id="wf-form-Form" name="wf-form-Form" method="POST" aria-label="Form" ></div>
+                            <div id="wf-form-Form" name="wf-form-Form" action="POST" aria-label="Form" ></div>
+                            <form class="form_form" @submit.prevent="submitForm">
+                                <div class="grid_2col">
+                                    <div>
+                                        <SelectField :form="form" value="product" type="product" labelStr="Product" />
+                                        <SelectField :form="form" value="color" type="color" labelStr="Color" />
+                                        <SelectField :form="form" value="size" type="size" labelStr="Size" />
+                                        <TextField :form="form" value="number" type="number" labelStr="Quantity" />
+                                    </div>
+                                    <div>
+
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -17,6 +30,14 @@
 </template>
 
 <script setup>
+    import { router } from '@inertiajs/vue3';
     import SpacerDiv from '../components/SpacerDiv.vue';
     import CardTitle from '../components/CardTitle.vue';
+    import SelectField from '../components/SelectField.vue';
+    import TextField from '../components/TextField.vue';
+    
+
+    function submitForm() {
+        router.post('/submit-form', form);
+    }
 </script>
