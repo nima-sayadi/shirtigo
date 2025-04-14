@@ -1,6 +1,6 @@
 import './bootstrap';
 import '../css/variables.css'
-import '../css/fixedClasses.css'
+import '../css/fixedStyles.css'
 import '../css/global.css'
 import '../css/app.css'
 

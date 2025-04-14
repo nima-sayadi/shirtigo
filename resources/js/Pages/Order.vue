@@ -15,6 +15,12 @@
                                         <SelectField :form="form" value="color" type="color" labelStr="Color" />
                                         <SelectField :form="form" value="size" type="size" labelStr="Size" />
                                         <TextField :form="form" value="number" type="number" labelStr="Quantity" />
+                                        <SpacerDiv />
+                                        <Divider />
+                                        <SpacerDiv />
+                                        <SliderField value="width" labelStr="Width" min="0" max="255" />
+                                        <SliderField value="offsetx" labelStr="Offset X" min="-255" max="255" />
+                                        <SliderField value="offsety" labelStr="Offset Y" min="-255" max="255" />
                                     </div>
                                     <div>
 
@@ -32,9 +38,11 @@
 <script setup>
     import { router } from '@inertiajs/vue3';
     import SpacerDiv from '../components/SpacerDiv.vue';
+    import Divider from '../components/Divider.vue';
     import CardTitle from '../components/CardTitle.vue';
     import SelectField from '../components/SelectField.vue';
     import TextField from '../components/TextField.vue';
+    import SliderField from '../components/SliderField.vue';
     
 
     function submitForm() {

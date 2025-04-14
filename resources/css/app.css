@@ -89,14 +89,6 @@
     grid-auto-columns: 1fr;
 }
 
-.form_form {
-    grid-column-gap: 1.5rem;
-    grid-row-gap: 1.5rem;
-    grid-template-rows: auto;
-    grid-template-columns: 1fr;
-    grid-auto-columns: 1fr;
-}
-
 .grid_2col{
     grid-column-gap: 4rem;
     grid-row-gap: 4rem;
@@ -108,7 +100,6 @@
 
 .w-input, .w-select {
     color: #333;
-    vertical-align: middle;
     background-color: #fff;
     border: 1px solid #ccc;
     width: 100%;
@@ -118,4 +109,36 @@
     font-size: 14px;
     line-height: 1.42857;
     display: block;
+}
+
+.w-inline-block {
+    max-width: 100%;
+    display: inline-block;
+}
+
+.form_field-wrapper {
+    margin-bottom: 1.25rem;
+}
+.form_label {
+    font-weight: 600;
+}
+
+.form_input {
+    padding: var(--space--xsmall) var(--space--small);
+    border: .1rem solid var(--color--border);
+    color: var(--color--text);
+    border-radius: .5rem;
+    min-height: 3.25rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+.form_input.is-select-input {
+    background-color: var(--swatches--neutral0);
+    align-items: center;
+    display: flex;
+}
+
+.w-input:focus, .w-select:focus {
+    border-color: #3898ec;
+    outline: 0;
 }
