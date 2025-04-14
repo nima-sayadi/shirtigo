@@ -1,9 +1,9 @@
 <template>
     <div class="form_field-wrapper">
-        <label :for="labelStr + 'Field'" class="form_label">{{ labelStr }}</label>
-        <select :id="labelStr + 'Field'" class="form_input is-select-input w-select" v-model="form[value]">
+        <label :for="labelStr + '-Field'" class="form_label">{{ labelStr }}</label>
+        <select :id="labelStr + '-Field'" class="form_input is-select-input w-select" v-model="selectedValue">
             <option value="">Select one...</option>
-            <option v-for="opt in options" :key="opt.value" :value="opt.value">
+            <option v-for="opt in selectOptions" :key="opt.value" :value="opt.value">
             {{ opt.label }}
             </option>
         </select>
@@ -11,22 +11,17 @@
 </template>
 
 <script setup>
-    import { reactive } from 'vue';
-    import { computed } from 'vue';
+    import { computed, ref, watch } from 'vue'
 
-    const form = reactive({
-        name: '',
-        role: '',
-    });
+    const emit = defineEmits(['update:options'])
 
     const props = defineProps({
         form: Object,
-        value: String,
         labelStr: String,
-        type: String
+        options: String
     });
-
-    const optionsMap = {
+    
+    const SelectOptionsMap = {
         'product': [
             { value: 'tshirt', label: 'T-Shirt' },
             { value: 'hoodie', label: 'Hoodie' },
@@ -42,9 +37,18 @@
             { value: '16', label: '16' },
             { value: '17', label: '17' },
         ],
-        // Add more types as needed
+        'country': [
+            { value: 'ch', label: 'Germany - DE' },
+            { value: 'de', label: 'Switzerland - CH' },
+        ],
 
     };
-    const options = computed(() => optionsMap[props.type] || []);
+    const selectOptions = computed(() => SelectOptionsMap[props.options] || []);
+    const selectedValue = ref('');
+
+    watch(selectedValue, (newValue) => {
+        emit('update:options', newValue);
+    });
+
 
 </script>

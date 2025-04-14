@@ -25,7 +25,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:value'])
 
-
 const defaultValue = Math.floor((Number(props.min) + Number(props.max)) / 2)
 
 const sliderValue = ref(Number(props.value) || defaultValue)

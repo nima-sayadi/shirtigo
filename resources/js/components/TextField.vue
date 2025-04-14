@@ -1,7 +1,7 @@
 <template>
     <div class="form_field-wrapper">
-        <label :for="labelStr + 'Field'" class="form_label">{{ labelStr }}</label>
-        <input :placeholder="placeholder" :type="props.type" :id="labelStr + 'Field'" class="form_input w-input" v-model="inputValue" @input="validateInput" >
+        <label :for="labelStr + '-Field'" class="form_label">{{ labelStr }}</label>
+        <input :placeholder="placeholder" :type="props.type" :id="labelStr + '-Field'" class="form_input w-input" v-model="inputValue" @input="validateInput" >
     </div>
 </template>
 

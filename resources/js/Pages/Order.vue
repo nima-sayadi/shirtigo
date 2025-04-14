@@ -11,10 +11,10 @@
                             <form class="form_form" @submit.prevent="submitForm">
                                 <div class="grid_2col">
                                     <div>
-                                        <SelectField :form="form" value="product" type="product" labelStr="Product" />
-                                        <SelectField :form="form" value="color" type="color" labelStr="Color" />
-                                        <SelectField :form="form" value="size" type="size" labelStr="Size" />
-                                        <TextField :form="form" value="number" type="number" labelStr="Quantity" />
+                                        <SelectField :form="form" options="product" labelStr="Product" />
+                                        <SelectField :form="form" options="color" labelStr="Color" />
+                                        <SelectField :form="form" options="size" labelStr="Size" />
+                                        <TextField :form="form" labelStr="Quantity" />
                                         <SpacerDiv />
                                         <Divider />
                                         <SpacerDiv />
@@ -23,12 +23,27 @@
                                         <SliderField value="offsety" labelStr="Offset Y" min="-255" max="255" />
                                     </div>
                                     <div>
-
+                                        <ImgWrapper />
+                                        <SpacerDiv />
+                                        <DesignImg />
                                     </div>
                                 </div>
+                                <SpacerDiv />
+                                <Divider />
+                                <SpacerDiv />
+                                <CardTitle title="2. Address" />
+                                <SpacerDiv />
+                                <TextField :form="form" type="text" labelStr="First Name" />
+                                <TextField :form="form" type="text" labelStr="Last Name" />
+                                <TextField :form="form" type="text" labelStr="Address" />
+                                <TextField :form="form" type="text" labelStr="ZIP/Postal Code" />
+                                <TextField :form="form" type="text" labelStr="City" />
+                                <SelectField :form="form" options="country" labelStr="Country" />
                             </form>
+                            <FormMsg />
                         </div>
                     </div>
+                    <CTA />
                 </div>
             </div>
         </div>
@@ -43,8 +58,12 @@
     import SelectField from '../components/SelectField.vue';
     import TextField from '../components/TextField.vue';
     import SliderField from '../components/SliderField.vue';
+    import ImgWrapper from '../components/ImgWrapper.vue';
+    import DesignImg from '../components/DesignImg.vue';
+    import FormMsg from '../components/FormMsg.vue';
+    import CTA from '../components/CTA.vue';
     
-
+    const form = {};
     function submitForm() {
         router.post('/submit-form', form);
     }

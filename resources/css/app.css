@@ -142,3 +142,27 @@
     border-color: #3898ec;
     outline: 0;
 }
+
+.w-form-fail {
+    background-color: #ffdede;
+    margin-top: 10px;
+    padding: 10px;
+    display: none;
+}
+
+.w-form-done {
+    text-align: center;
+    background-color: #ddd;
+    padding: 20px;
+    display: none;
+}
+
+.text-color-blue {
+    color: var(--swatches--blue500);
+}
+
+.heading-style-h3 {
+    font-size: var(--text-size--xxlarge);
+    font-weight: 800;
+    line-height: 1.2;
+}
