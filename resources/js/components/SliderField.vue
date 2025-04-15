@@ -19,6 +19,7 @@ import { ref, computed, watch } from 'vue'
 const props = defineProps({
     labelStr: String,
     value: String,
+    data: Array,
     min: String,
     max: String
 })

@@ -14,6 +14,7 @@
     const props = defineProps({
         form: Object,
         labelStr: String,
+        data: Array,
         type: String
     });
 

@@ -7,23 +7,47 @@
                         <CardTitle title="1. Product" />
                         <SpacerDiv />
                         <div class="form_component w-form">
-                            <div id="wf-form-Form" name="wf-form-Form" action="POST" aria-label="Form" ></div>
+                            <div id="wf-form-Form" name="wf-form-Form" action="POST" aria-label="Form"></div>
                             <form class="form_form" @submit.prevent="submitForm">
                                 <div class="grid_2col">
                                     <div>
-                                        <SelectField :form="form" options="product" labelStr="Product" />
-                                        <SelectField :form="form" options="color" labelStr="Color" />
-                                        <SelectField :form="form" options="size" labelStr="Size" />
-                                        <TextField :form="form" labelStr="Quantity" />
+                                        <SelectField :data="productsData" options="product" labelStr="Product"
+                                            v-model:selectedValue="selectedProduct" @update:productId="updateProductId" />
+                                        <SelectField 
+                                            :data="productsData" 
+                                            options="color" 
+                                            labelStr="Color"
+                                            v-model:selectedValue="selectedColor"
+                                            :isProductSelected="isProductSelected"
+                                            :productId="productId"
+                                            @update:colorName="updateColor"
+                                        />
+                                        <SelectField 
+                                            :data="productsData" 
+                                            options="size" 
+                                            labelStr="Size"
+                                            v-model:selectedValue="selectedSize" 
+                                            :isProductSelected="isProductSelected"
+                                            :isColorSelected="isColorSelected"
+                                            :productId="productId"
+                                            :colorName="colorName"
+                                            :sku="sku"
+                                            @update:sku="updateSku"
+
+                                        />
+                                        <TextField :data="productsData" labelStr="Quantity" />
                                         <SpacerDiv />
                                         <Divider />
                                         <SpacerDiv />
-                                        <SliderField value="width" labelStr="Width" min="0" max="255" />
-                                        <SliderField value="offsetx" labelStr="Offset X" min="-255" max="255" />
-                                        <SliderField value="offsety" labelStr="Offset Y" min="-255" max="255" />
+                                        <SliderField :data="productsData" value="width" labelStr="Width" min="0"
+                                            max="255" />
+                                        <SliderField :data="productsData" value="offsetx" labelStr="Offset X" min="-255"
+                                            max="255" />
+                                        <SliderField :data="productsData" value="offsety" labelStr="Offset Y" min="-255"
+                                            max="255" />
                                     </div>
                                     <div>
-                                        <ImgWrapper />
+                                        <ImgWrapper :data="productsData" />
                                         <SpacerDiv />
                                         <DesignImg />
                                     </div>
@@ -33,12 +57,12 @@
                                 <SpacerDiv />
                                 <CardTitle title="2. Address" />
                                 <SpacerDiv />
-                                <TextField :form="form" type="text" labelStr="First Name" />
-                                <TextField :form="form" type="text" labelStr="Last Name" />
-                                <TextField :form="form" type="text" labelStr="Address" />
-                                <TextField :form="form" type="text" labelStr="ZIP/Postal Code" />
-                                <TextField :form="form" type="text" labelStr="City" />
-                                <SelectField :form="form" options="country" labelStr="Country" />
+                                <TextField type="text" labelStr="First Name" />
+                                <TextField type="text" labelStr="Last Name" />
+                                <TextField type="text" labelStr="Address" />
+                                <TextField type="text" labelStr="ZIP/Postal Code" />
+                                <TextField type="text" labelStr="City" />
+                                <SelectField options="country" labelStr="Country" />
                             </form>
                             <FormMsg />
                         </div>
@@ -52,6 +76,7 @@
 
 <script setup>
     import { router } from '@inertiajs/vue3';
+    import { ref , computed , watch} from 'vue';
     import SpacerDiv from '../components/SpacerDiv.vue';
     import Divider from '../components/Divider.vue';
     import CardTitle from '../components/CardTitle.vue';
@@ -62,9 +87,43 @@
     import DesignImg from '../components/DesignImg.vue';
     import FormMsg from '../components/FormMsg.vue';
     import CTA from '../components/CTA.vue';
+
+    const props = defineProps({
+        products: Object,
+    });
+    const productsData = props.products.data.data || [];
+    const selectedProduct = ref('');
+    const selectedColor = ref('');
+    const selectedSize = ref('');
+    const productId = ref('');
+    const colorName = ref('');
+    const sku = ref('');
+    const isProductSelected = computed(() => selectedProduct.value !== '');
+    const isColorSelected = computed(() => selectedColor.value !== '');
+
+    const updateProductId = (id) => {
+        productId.value = id;
+    };
+
+    const updateColor = (name) => {
+        colorName.value = name;
+    };
+
+    const updateSku = (str) => {
+        sku.value = str;
+        console.log("sku : " + str)
+    };
+
+    watch(selectedProduct, () => {
+        selectedColor.value = '';
+        selectedSize.value = '';
+        colorName.value = '';
+        sku.value = '';
+    });
+    watch(selectedColor, () => {
+        selectedSize.value = '';
+        sku.value = '';
+    });
     
-    const form = {};
-    function submitForm() {
-        router.post('/submit-form', form);
-    }
+
 </script>
