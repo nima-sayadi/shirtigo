@@ -13,7 +13,19 @@
 <script setup>
     import { computed } from 'vue';
 
-    const emit = defineEmits(['update:selectedValue' , 'update:isProductSelected' , 'update:productId' , 'update:colorName' , 'update:sku' , 'update:country']);
+    const emit = defineEmits([
+        'update:selectedValue',
+        'update:isProductSelected',
+        'update:productId',
+        'update:colorName',
+        'update:sku',
+        'update:country',
+        'update:maxWidth',
+        'update:minXOffset',
+        'update:maxXOffset',
+        'update:maxYOffset',
+        'update:imgURL'
+    ]);
 
     const props = defineProps({
         selectedValue: String,
@@ -23,6 +35,11 @@
         data: Array,
         options: String,
         productId: String,
+        maxWidth: String,
+        minXOffset: String,
+        maxXOffset: String,
+        maxYOffset: String,
+        imgURL: String,
         colorName: String,
         sku: String,
         country: String,
@@ -35,6 +52,19 @@
             emit('update:productId', event.target.value);
             emit('update:colorName', '');
             emit('update:sku', '');
+            for (let element of selectOptions.value){
+                if(element.value == event.target.value){
+                    let min_Xoffset = (-(Number(element.width) / 2) + Number(element.xOffset));
+                    let max_Xoffset = ((Number(element.width) / 2) + Number(element.xOffset));
+                    let max_Yoffset = (Number(element.height) - Number(element.yOffset)); // The min_Yoffest would always be 0 because the object starts from the collar not the center.
+                    emit('update:maxWidth', element.width.toString());
+                    emit('update:minXOffset', min_Xoffset.toString());
+                    emit('update:maxXOffset', max_Xoffset.toString());
+                    emit('update:maxYOffset', max_Yoffset.toString());
+                    emit('update:imgURL', element.imgURL);
+                    break;
+                }
+            }
         }
         else if (props.options == 'color'){
             emit('update:colorName', event.target.value);
@@ -62,6 +92,11 @@
                 return props.data.map(item => ({
                     value: item.id,
                     label: item.name,
+                    imgURL: item.mockups.data[0].image_url,
+                    width: item.processing_areas.data[0].width_in_mm,
+                    height: item.processing_areas.data[0].height_in_mm,
+                    xOffset: item.processing_areas.data[0].offset_x_center_mm,
+                    yOffset: item.processing_areas.data[0].offset_y_collar_mm,
                 }));
 
             case 'color':
@@ -70,7 +105,6 @@
                 }
                 for (let element of props.data) {
                     if (element.id == props.productId) {
-                        console.log(element)
                         productObj = element;
                         break;
                     }

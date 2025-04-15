@@ -11,8 +11,18 @@
                             <form class="form_form" @submit.prevent="submitForm">
                                 <div class="grid_2col">
                                     <div>
-                                        <SelectField :data="productsData" options="product" labelStr="Product"
-                                            v-model:selectedValue="selectedProduct" @update:productId="updateProductId" />
+                                        <SelectField 
+                                            :data="productsData" 
+                                            options="product" 
+                                            labelStr="Product"
+                                            v-model:selectedValue="selectedProduct"
+                                            @update:productId="updateProductId"
+                                            @update:maxWidth="updateMaxWidth"
+                                            @update:minXOffset="updateMinXOffset"
+                                            @update:maxXOffset="updateMaxXOffset"
+                                            @update:maxYOffset="updateMaxYOffset"
+                                            @update:imgURL="updateImgURL"
+                                            />
                                         <SelectField 
                                             :data="productsData" 
                                             options="color" 
@@ -35,19 +45,16 @@
                                             @update:sku="updateSku"
 
                                         />
-                                        <TextField :data="productsData" labelStr="Quantity" />
+                                        <TextField type="number" labelStr="Quantity" />
                                         <SpacerDiv />
                                         <Divider />
                                         <SpacerDiv />
-                                        <SliderField :data="productsData" value="width" labelStr="Width" min="0"
-                                            max="255" />
-                                        <SliderField :data="productsData" value="offsetx" labelStr="Offset X" min="-255"
-                                            max="255" />
-                                        <SliderField :data="productsData" value="offsety" labelStr="Offset Y" min="-255"
-                                            max="255" />
+                                        <SliderField labelStr="Width" min="0" :max="maxWidth" @update:widthUserInput="updatewidthUserInput" />
+                                        <SliderField labelStr="Offset X" :min="minXOffset" :max="maxXOffset" @update:offsetxUserInput="updateoffsetxUserInput" />
+                                        <SliderField labelStr="Offset Y" min="0" :max="maxYOffset" @update:offsetyUserInput="updateoffsetyUserInput" />
                                     </div>
                                     <div>
-                                        <ImgWrapper :data="productsData" />
+                                        <ImgWrapper :imgURL="imgURL" />
                                         <SpacerDiv />
                                         <DesignImg />
                                     </div>
@@ -98,9 +105,16 @@
     const productId = ref('');
     const colorName = ref('');
     const sku = ref('');
+    const maxWidth = ref('255');
+    const minXOffset = ref('-255');
+    const maxXOffset = ref('255');
+    const maxYOffset = ref('255');
+    const widthUserInput = ref('127');
+    const offsetxUserInput = ref('0');
+    const offsetyUserInput = ref('127');
+    const imgURL = ref('https://s3-eu-west-1.amazonaws.com/shirtigo-assets/creator-mockups/368/premium-shirt-flat_creator_mockup_front.webp');
     const isProductSelected = computed(() => selectedProduct.value !== '');
     const isColorSelected = computed(() => selectedColor.value !== '');
-
     const updateProductId = (id) => {
         productId.value = id;
     };
@@ -111,7 +125,37 @@
 
     const updateSku = (str) => {
         sku.value = str;
-        console.log("sku : " + str)
+    };
+
+    const updateMaxWidth = (str) => {
+        maxWidth.value = str;
+    };
+
+    const updateMinXOffset = (str) => {
+        minXOffset.value = str;
+    };
+
+    const updateMaxXOffset = (str) => {
+        maxXOffset.value = str;
+    };
+
+    const updateMaxYOffset = (str) => {
+        maxYOffset.value = str;
+    };
+
+    const updateImgURL = (str) => {
+        imgURL.value = str;
+    };
+
+    const updatewidthUserInput = (str) => {
+        widthUserInput.value = str;
+    };
+    const updateoffsetxUserInput = (str) => {
+        offsetxUserInput.value = str;
+    };
+    const updateoffsetyUserInput = (str) => {
+        offsetyUserInput.value = str;
+        console.log(offsetyUserInput.value)
     };
 
     watch(selectedProduct, () => {
@@ -119,6 +163,7 @@
         selectedSize.value = '';
         colorName.value = '';
         sku.value = '';
+
     });
     watch(selectedColor, () => {
         selectedSize.value = '';

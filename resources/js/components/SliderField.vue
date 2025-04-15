@@ -18,25 +18,34 @@ import { ref, computed, watch } from 'vue'
 
 const props = defineProps({
     labelStr: String,
-    value: String,
-    data: Array,
+    widthUserInput: String,
     min: String,
     max: String
 })
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:widthUserInput'])
 
 const defaultValue = Math.floor((Number(props.min) + Number(props.max)) / 2)
 
-const sliderValue = ref(Number(props.value) || defaultValue)
+const sliderValue = ref(Number(props.widthUserInput) || defaultValue)
 
 watch(sliderValue, (val) => {
-    emit('update:value', val.toString())
+    emit('update:widthUserInput', val.toString())
 })
 
-// Moving knob based on percentage
-const knobLeft = computed(() => ((sliderValue.value - props.min) / (props.max - props.min)) * 100)
+const centerSliderValue = () => {
+    const midValue = Math.floor((Number(props.min) + Number(props.max)) / 2)
+    sliderValue.value = midValue
+}
 
+watch([() => props.min, () => props.max], () => {
+    centerSliderValue()
+})
+
+const knobLeft = computed(() => {
+    const percentage = ((sliderValue.value - props.min) / (props.max - props.min)) * 100
+    return Math.min(100, Math.max(0, percentage)) // Clamping the value to 0% - 100%
+})
 </script>
 
 <style scoped>

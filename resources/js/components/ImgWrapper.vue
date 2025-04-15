@@ -12,15 +12,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
-    data: Array,
+    imgURL: String,
 });
 
-const imageSrc = "https://s3-eu-west-1.amazonaws.com/shirtigo-assets/creator-mockups/368/premium-shirt-flat_creator_mockup_front.webp"
+const imageSrc = computed(() => props.imgURL)
 
-const imageSrcset = "https://s3-eu-west-1.amazonaws.com/shirtigo-assets/creator-mockups/368/premium-shirt-flat_creator_mockup_front.webp 500w, https://s3-eu-west-1.amazonaws.com/shirtigo-assets/creator-mockups/368/premium-shirt-flat_creator_mockup_front.webp 800w"
+const imageSrcset = computed(() => `${props.imgURL} 500w, ${props.imgURL} 800w`)
 
 const imageSizes = "(max-width: 479px) 93vw, (max-width: 767px) 95vw, (max-width: 800px) 100vw, (max-width: 991px) 800px, 47vw"
 
