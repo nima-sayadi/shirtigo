@@ -11,12 +11,13 @@
     import { watch, ref } from 'vue'
     const props = defineProps({
         isFormSubmitted: Boolean,
+        isFormReady: Boolean,
     });
 
     const display = ref("none");
 
     watch(() => props.isFormSubmitted, (newVal) => {
-        if (newVal == true) {
+        if (newVal && props.isFormReady) {
             display.value = "block";
         }
         else {

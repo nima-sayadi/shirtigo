@@ -66,7 +66,7 @@
                                 <TextField type="text" labelStr="City" :textFieldsObject="textFieldsObject" @update:textFieldsObject="updateTextFieldsObject" />
                                 <SelectField options="country" :isFormReady="isFormReady" v-model:selectedValue="selectedCountry" labelStr="Country" :selectFieldsObject="selectFieldsObject" @callCalculatePrice="calculatePrice" @update:selectFieldsObject="updateSelectFieldsObject" />
                             </form>
-                            <FormMsg :isFormSubmitted="isFormSubmitted" />
+                            <FormMsg :isFormReady="isFormReady" :isFormSubmitted="isFormSubmitted" />
                         </div>
                     </div>
                     <CTA :predictedPrice="predictedPrice" :isFormSubmitted="isFormSubmitted" :isFormReady="isFormReady" @callCreateOrder="createOrder" @update:isFormSubmitted="updateIsFormSubmitted" />
