@@ -226,6 +226,9 @@
         selectedSize.value = '';
         selectFieldsObject.value.sku = '';
     });
+    watch(isFormReady, () => {
+        predictedPrice.value = '0.00';
+    });
     
 
 </script>
