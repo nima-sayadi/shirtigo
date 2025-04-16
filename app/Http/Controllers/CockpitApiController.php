@@ -40,10 +40,12 @@ class CockpitApiController extends Controller {
             'products.*.amount' => 'required|integer|min:1',
             'products.*.processings.*.processingarea_type' => 'required|string',
             'products.*.processings.*.processingposition' => 'required|string',
+            'products.*.processings.*.processingmethod' => 'required|string',
             'products.*.processings.*.design_url' => 'required|string',
             'products.*.processings.*.width' => 'required|integer',
             'products.*.processings.*.offset_top' => 'required|integer',
-            'products.*.processings.*.offset_center' => 'required|integer',
+            'products.*.processings.*.force_position' => 'required|boolean',
+            'products.*.processings.*.extract_size_and_position' => 'required|boolean',
         ]);
         $response = $this->apiService->calculatePrice($data);
         return $response;
