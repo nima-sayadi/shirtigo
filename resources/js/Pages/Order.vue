@@ -189,14 +189,7 @@
     }
 
     function createOrder() {
-        // axios.post('/api/predict-price', completeForm.value)
-        // .then(response => {
-        //     console.log('API response:', response.data.body);
-        // })
-        // .catch(error => {
-        //     console.error('Error during API request:', error);
-        // });
-        
+        // Axios Req Here
     }
 
     const updateSelectFieldsObject = (data) => {
