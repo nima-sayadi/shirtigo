@@ -72,8 +72,8 @@ class CockpitApiController extends Controller {
             'products.*.processings.*.extract_size_and_position' => 'required|boolean',
         ]);
         $response = $this->apiService->createOrder($data);
-        if($response[''] == 200){
-            event(new OrderWasPlaced($response['status']));
+        if($response['status'] == 200){
+            event(new OrderWasPlaced($response['data']));
         }
         return $response;
     }

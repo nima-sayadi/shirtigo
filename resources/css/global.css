@@ -79,6 +79,7 @@ img {
     background-color: var(--color--primary);
     color: var(--swatches--neutral0);
     text-align: center;
+    cursor: pointer;
     border-radius: .5rem;
     flex: none;
     padding: .75rem 1.25rem;

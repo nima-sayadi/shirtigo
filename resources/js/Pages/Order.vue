@@ -66,10 +66,10 @@
                                 <TextField type="text" labelStr="City" :textFieldsObject="textFieldsObject" @update:textFieldsObject="updateTextFieldsObject" />
                                 <SelectField options="country" :isFormReady="isFormReady" v-model:selectedValue="selectedCountry" labelStr="Country" :selectFieldsObject="selectFieldsObject" @callCalculatePrice="calculatePrice" @update:selectFieldsObject="updateSelectFieldsObject" />
                             </form>
-                            <FormMsg />
+                            <FormMsg :isFormSubmitted="isFormSubmitted" />
                         </div>
                     </div>
-                    <CTA />
+                    <CTA :isFormSubmitted="isFormSubmitted" :isFormReady="isFormReady" @callCreateOrder="createOrder" @update:isFormSubmitted="updateIsFormSubmitted" />
                 </div>
             </div>
         </div>
@@ -98,6 +98,7 @@
     const selectedColor = ref('');
     const selectedSize = ref('');
     const selectedCountry = ref('');
+    const isFormSubmitted= ref(false);
     const sliderFieldsObject = ref({
         widthUserInput : '127',
         offsetxUserInput : '0',
@@ -169,19 +170,32 @@
                     offset_center: Number(sliderFieldsObject.value.offsetxUserInput),
                     force_position: false,
                     extract_size_and_position: false,
-                }]
+                    ignore_validation : false,
+                }],
             }]
-        };
+        }
     });
 
     function calculatePrice() {
-        axios.post('/api/predict-price', completeForm.value)
-        .then(response => {
-            console.log('API response:', response.data);
-        })
-        .catch(error => {
-            console.error('Error during API request:', error);
-        });
+        // axios.post('/api/predict-price', completeForm.value)
+        // .then(response => {
+        //     console.log('API response:', response.data.body);
+        // })
+        // .catch(error => {
+        //     console.error('Error during API request:', error);
+        // });
+        
+    }
+
+    function createOrder() {
+        // axios.post('/api/predict-price', completeForm.value)
+        // .then(response => {
+        //     console.log('API response:', response.data.body);
+        // })
+        // .catch(error => {
+        //     console.error('Error during API request:', error);
+        // });
+        
     }
 
     const updateSelectFieldsObject = (data) => {
@@ -194,6 +208,10 @@
 
     const updateSliderFieldsObject = (data) => {
         sliderFieldsObject.value = { ...sliderFieldsObject.value, ...data };
+    };
+
+    const updateIsFormSubmitted = (bool) => {
+        isFormSubmitted.value = bool;
     };
 
     watch(selectedProduct, () => {

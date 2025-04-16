@@ -75,7 +75,7 @@
     }
 
     // The recalculation of price based on country change, in real world scenarios might use debouncing as well
-    watch(() => props.selectFieldsObject.country, (newValue, oldValue) => {
+    watch(() => props.selectFieldsObject.country, (newValue) => {
         if(props.isFormReady && newValue !== ''){
             emit('callCalculatePrice');
         }
