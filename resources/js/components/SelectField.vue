@@ -74,9 +74,15 @@
         emit('update:selectFieldsObject', updatedData);
     }
 
-    // The recalculation of price based on country change, in real world scenarios might use debouncing as well
-    watch(() => props.selectFieldsObject.country, (newValue) => {
+    // The recalculation of price based on country change
+    watch(() => props.selectFieldsObject.country, (newValue) => { // Note that the endpoint requires all information of the form
         if(props.isFormReady && newValue !== ''){
+            emit('callCalculatePrice');
+        }
+    });
+    // The recalculation of price based on product change
+    watch(() => props.selectFieldsObject.size, (newValue) => {
+        if(props.isFormReady && newValue !== ''){ // Note that the endpoint requires all information of the form so it is set to the size instead of the product id
             emit('callCalculatePrice');
         }
     });

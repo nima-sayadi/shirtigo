@@ -40,7 +40,7 @@
                                             @update:selectFieldsObject="updateSelectFieldsObject"
 
                                         />
-                                        <TextField type="number" :isFormReady="isFormReady" labelStr="Quantity" :textFieldsObject="textFieldsObject" @update:textFieldsObject="updateTextFieldsObject" />
+                                        <TextField type="number" :isFormReady="isFormReady" labelStr="Quantity" @callCalculatePrice="calculatePrice" :textFieldsObject="textFieldsObject" @update:textFieldsObject="updateTextFieldsObject" />
                                         <SpacerDiv />
                                         <Divider />
                                         <SpacerDiv />
@@ -69,7 +69,7 @@
                             <FormMsg :isFormSubmitted="isFormSubmitted" />
                         </div>
                     </div>
-                    <CTA :isFormSubmitted="isFormSubmitted" :isFormReady="isFormReady" @callCreateOrder="createOrder" @update:isFormSubmitted="updateIsFormSubmitted" />
+                    <CTA :predictedPrice="predictedPrice" :isFormSubmitted="isFormSubmitted" :isFormReady="isFormReady" @callCreateOrder="createOrder" @update:isFormSubmitted="updateIsFormSubmitted" />
                 </div>
             </div>
         </div>
@@ -98,6 +98,7 @@
     const selectedColor = ref('');
     const selectedSize = ref('');
     const selectedCountry = ref('');
+    const predictedPrice = ref('0.00');
     const isFormSubmitted= ref(false);
     const sliderFieldsObject = ref({
         widthUserInput : '127',
@@ -179,12 +180,12 @@
     function calculatePrice() {
         // axios.post('/api/predict-price', completeForm.value)
         // .then(response => {
-        //     console.log('API response:', response.data.body);
+        //     console.log('API response:', response.data);
         // })
         // .catch(error => {
         //     console.error('Error during API request:', error);
         // });
-        
+        predictedPrice.value = "12.50"
     }
 
     function createOrder() {

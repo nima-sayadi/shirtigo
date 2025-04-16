@@ -25,14 +25,12 @@
         placeholder = "";
     }
 
-    // // The recalculation of price based on country change, in real world scenarios might use debouncing as well
-    // watch(() => props.textFieldsObject.qty, (newValue, oldValue) => {
-    //     if(props.isFormReady && newValue !== '' && newValue > 1){
-    //         emit('callCalculatePrice');
-    //     }
-    // });
-
-    // The recalculation of price based on country change, in real world scenarios might use debouncing as well
+    // The recalculation of price based on quantity change
+    watch(() => props.textFieldsObject.qty, (newValue) => {
+        if(props.isFormReady && newValue !== '' && newValue > 1){ // Note that the endpoint requires all information of the form
+            emit('callCalculatePrice'); 
+        }
+    });
 
     const handler = () => {
         let updatedData = { ...props.textFieldsObject};
