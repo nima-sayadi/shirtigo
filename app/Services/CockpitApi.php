@@ -27,4 +27,30 @@ class CockpitApi
             'data' => $data
         ];
     }
+    public function calculatePrice(array $data)
+    {
+
+        $response = Http::withToken($this->apiToken)->post("{$this->baseUrl}/orders/predict-price", $data);
+
+        $statusCode = $response->status();
+        $data = $response->json();
+    
+        return [
+            'status' => $statusCode,
+            'data' => $data
+        ];
+    }
+    public function createOrder(array $data)
+    {
+
+        $response = Http::withToken($this->apiToken)->post("{$this->baseUrl}/orders", $data);
+
+        $statusCode = $response->status();
+        $data = $response->json();
+    
+        return [
+            'status' => $statusCode,
+            'data' => $data
+        ];
+    }
 }

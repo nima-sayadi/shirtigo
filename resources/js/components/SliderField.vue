@@ -18,19 +18,34 @@ import { ref, computed, watch } from 'vue'
 
 const props = defineProps({
     labelStr: String,
-    widthUserInput: String,
+    sliderFieldsObject: Object,
     min: String,
     max: String
 })
-
-const emit = defineEmits(['update:widthUserInput'])
+const emit = defineEmits([
+    'update:sliderFieldsObject'
+]);
 
 const defaultValue = Math.floor((Number(props.min) + Number(props.max)) / 2)
 
-const sliderValue = ref(Number(props.widthUserInput) || defaultValue)
+const sliderValue = ref(defaultValue)
 
 watch(sliderValue, (val) => {
-    emit('update:widthUserInput', val.toString())
+    let updatedData = { ...props.sliderFieldsObject};
+    switch (props.labelStr) {
+        case "Width":
+            updatedData.widthUserInput = val.toString();
+            break;
+        case "Offset X":
+            updatedData.offsetxUserInput = val.toString();
+            break;
+        case "Offset Y":
+            updatedData.offsetyUserInput = val.toString();
+            break;
+        default:
+            break;
+    }
+    emit('update:sliderFieldsObject', updatedData);
 })
 
 const centerSliderValue = () => {

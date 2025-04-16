@@ -1,7 +1,7 @@
 <template>
     <div class="form_field-wrapper">
         <label :for="labelStr + '-Field'" class="form_label">{{ labelStr }}</label>
-        <select :id="labelStr + '-Field'" class="form_input is-select-input w-select" :value="selectedValue" @change="handleChange">
+        <select :id="labelStr + '-Field'" class="form_input is-select-input w-select" :value="selectedValue" @change="handleChange" >
             <option value="">Select one...</option>
             <option v-for="opt in selectOptions" :key="opt.value" :value="opt.value">
                 {{ opt.label }}
@@ -11,77 +11,75 @@
 </template>
 
 <script setup>
-    import { computed } from 'vue';
+    import { computed , watch} from 'vue';
 
     const emit = defineEmits([
         'update:selectedValue',
         'update:isProductSelected',
-        'update:productId',
-        'update:colorName',
-        'update:sku',
-        'update:country',
-        'update:maxWidth',
-        'update:minXOffset',
-        'update:maxXOffset',
-        'update:maxYOffset',
-        'update:imgURL'
+        'update:selectFieldsObject',
+        'callCalculatePrice',
     ]);
 
     const props = defineProps({
         selectedValue: String,
         isProductSelected: Boolean,
         isColorSelected: Boolean,
+        isFormReady: Boolean,
         labelStr: String,
+        selectFieldsObject: Object,
         data: Array,
         options: String,
-        productId: String,
-        maxWidth: String,
-        minXOffset: String,
-        maxXOffset: String,
-        maxYOffset: String,
-        imgURL: String,
-        colorName: String,
-        sku: String,
-        country: String,
     });
 
 
     function handleChange(event) {
         emit('update:selectedValue', event.target.value);
+        let updatedData = { ...props.selectFieldsObject};
         if (props.options == 'product'){
-            emit('update:productId', event.target.value);
-            emit('update:colorName', '');
-            emit('update:sku', '');
+            updatedData.productId = event.target.value;
+            updatedData.colorName = '';
+            updatedData.sku = '';
             for (let element of selectOptions.value){
                 if(element.value == event.target.value){
                     let min_Xoffset = (-(Number(element.width) / 2) + Number(element.xOffset));
                     let max_Xoffset = ((Number(element.width) / 2) + Number(element.xOffset));
                     let max_Yoffset = (Number(element.height) - Number(element.yOffset)); // The min_Yoffest would always be 0 because the object starts from the collar not the center.
-                    emit('update:maxWidth', element.width.toString());
-                    emit('update:minXOffset', min_Xoffset.toString());
-                    emit('update:maxXOffset', max_Xoffset.toString());
-                    emit('update:maxYOffset', max_Yoffset.toString());
-                    emit('update:imgURL', element.imgURL);
+                    updatedData.maxWidth = element.width.toString();
+                    updatedData.minXOffset = min_Xoffset.toString();
+                    updatedData.maxXOffset = max_Xoffset.toString();
+                    updatedData.maxYOffset = max_Yoffset.toString();
+                    updatedData.imgURL = element.imgURL;
                     break;
                 }
+                
             }
         }
         else if (props.options == 'color'){
-            emit('update:colorName', event.target.value);
-            emit('update:sku', '');
+            updatedData.colorName = event.target.value;
+            updatedData.sku = '';
         }
         else if (props.options == 'size'){
             for (let element of selectOptions.value){
                 if(element.value == event.target.value){
-                    emit('update:sku', element.sku);
+                    updatedData.sku = element.sku;
+                    updatedData.size = element.value;
                     break;
                 }
             }
         }
         else {
-            emit('update:country', event.target.value);
+            updatedData.country = event.target.value;
+            
         }
+        emit('update:selectFieldsObject', updatedData);
     }
+
+    // The recalculation of price based on country change, in real world scenarios might use debouncing as well
+    watch(() => props.selectFieldsObject.country, (newValue, oldValue) => {
+        if(props.isFormReady && newValue !== ''){
+            emit('callCalculatePrice');
+        }
+    });
 
     const selectOptions = computed(() => {
         let productObj = null;
@@ -104,7 +102,7 @@
                     return [];
                 }
                 for (let element of props.data) {
-                    if (element.id == props.productId) {
+                    if (element.id == props.selectFieldsObject.productId) {
                         productObj = element;
                         break;
                     }
@@ -119,9 +117,9 @@
                     return [];
                 }
                 for (let element of props.data) {
-                    if (element.id == props.productId) {
+                    if (element.id == props.selectFieldsObject.productId) {
                         for (let colorElement of element.colors.data){
-                            if (colorElement.color == props.colorName) {
+                            if (colorElement.color == props.selectFieldsObject.colorName) {
                                 colorObj = colorElement;
                                 break;
                             }

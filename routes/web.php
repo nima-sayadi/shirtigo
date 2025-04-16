@@ -6,9 +6,6 @@ use Inertia\Inertia;
 
 Route::get('/', [CockpitApiController::class, 'getProducts'])->name('orders');
 
-// API routes for predictions and placing orders
-Route::post('api/predict-price', [CockpitApiController::class, 'predictPrice']);
-Route::post('api/place-order', [CockpitApiController::class, 'placeOrder']);
-
-// REMOVE THE BELOW LINE
-Route::get('/test', [CockpitApiController::class, 'getProducts']);
+// API routes for predictions and placing orders | typical Axios is used for the below paths | Could also used API middleware
+Route::post('api/predict-price', [CockpitApiController::class, 'calculatePrice']);
+Route::post('api/place-order', [CockpitApiController::class, 'createOrder']);
