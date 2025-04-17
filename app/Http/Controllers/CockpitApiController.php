@@ -19,7 +19,7 @@ class CockpitApiController extends Controller {
 
     public function getProducts()
     {
-        $response = $this->apiService->baseProducts();
+        $response = $this->apiService->getProducts();
         return Inertia::render('Order', [
             'products' => $response,
         ]);
@@ -27,9 +27,10 @@ class CockpitApiController extends Controller {
 
     public function calculatePrice(Request $request)
     {
-        $data = $request->validate([
+        $payload = $request->validate([
             'delivery' => 'required|array',
             'products' => 'required|array',
+            'fulfillment_mode_key' => 'required|string',
             'delivery.firstname' => 'required|string',
             'delivery.lastname' => 'required|string',
             'delivery.street' => 'required|string',
@@ -44,16 +45,19 @@ class CockpitApiController extends Controller {
             'products.*.processings.*.design_url' => 'required|string',
             'products.*.processings.*.width' => 'required|integer',
             'products.*.processings.*.offset_top' => 'required|integer',
+            'products.*.processings.*.offset_center' => 'required|integer',
             'products.*.processings.*.force_position' => 'required|boolean',
             'products.*.processings.*.extract_size_and_position' => 'required|boolean',
+            'products.*.processings.*.ignore_validation' => 'required|boolean',
         ]);
-        $response = $this->apiService->calculatePrice($data);
+        
+        $response = $this->apiService->calculatePrice($payload);
         return $response;
     }
 
     public function createOrder(Request $request)
     {
-        $data = $request->validate([
+        $payload = $request->validate([
             'delivery' => 'required|array',
             'products' => 'required|array',
             'delivery.firstname' => 'required|string',
@@ -70,10 +74,12 @@ class CockpitApiController extends Controller {
             'products.*.processings.*.design_url' => 'required|string',
             'products.*.processings.*.width' => 'required|integer',
             'products.*.processings.*.offset_top' => 'required|integer',
+            'products.*.processings.*.offset_center' => 'required|integer',
             'products.*.processings.*.force_position' => 'required|boolean',
             'products.*.processings.*.extract_size_and_position' => 'required|boolean',
+            'products.*.processings.*.ignore_validation' => 'required|boolean',
         ]);
-        $response = $this->apiService->createOrder($data);
+        $response = $this->apiService->createOrder($payload);
         if($response['status'] == 200){
             event(new OrderWasPlaced($response['data']));
         }

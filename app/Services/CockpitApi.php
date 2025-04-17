@@ -15,42 +15,81 @@ class CockpitApi
         $this->apiToken = config('services.shirtigo_api.token');
     }
 
-    public function baseProducts()
+    public function getProducts()
     {
-        $response = Http::withToken($this->apiToken)->get("{$this->baseUrl}/base-products?category=1");
+        $response = Http::withToken($this->apiToken)->withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->get("{$this->baseUrl}/base-products?category=1");
 
         $statusCode = $response->status();
         $data = $response->json();
+        $data = $data['data'] ?? $data;
     
         return [
             'status' => $statusCode,
             'data' => $data
         ];
     }
-    public function calculatePrice(array $data)
+    public function calculatePrice(array $payload)
     {
-
-        $response = Http::withToken($this->apiToken)->post("{$this->baseUrl}/orders/predict-price", $data);
+        $response = Http::withToken($this->apiToken)->withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post("{$this->baseUrl}/orders/predict-price", $payload);
 
         $statusCode = $response->status();
         $data = $response->json();
-    
-        return [
-            'status' => $statusCode,
-            'data' => $data
-        ];
+        $data = $data['data'] ?? $data;
+        try {
+            if ($statusCode != "200" && $statusCode !="201") {
+                return [
+                    'status' => $statusCode,
+                    'msg' => "Shirtigo Cockpit API returned $statusCode",
+                    'CockpitAPI msg' => $data['message'],
+                ];
+            }
+            return [
+                'status' => $statusCode,
+                'data' => $data,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong with backend.',
+            ];
+        }
+
     }
-    public function createOrder(array $data)
+    public function createOrder(array $payload)
     {
 
-        $response = Http::withToken($this->apiToken)->post("{$this->baseUrl}/orders", $data);
+        $response = Http::withToken($this->apiToken)->withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post("{$this->baseUrl}/orders", $payload);
 
         $statusCode = $response->status();
         $data = $response->json();
+        $data = $data['data'] ?? $data;
     
-        return [
-            'status' => $statusCode,
-            'data' => $data
-        ];
+        try {
+            if ($statusCode != "200" && $statusCode !="201") {
+                return [
+                    'status' => $statusCode,
+                    'msg' => "Shirtigo Cockpit API returned $statusCode",
+                    'CockpitAPI msg' => $data['message'],
+                ];
+            }
+            return [
+                'status' => $statusCode,
+                'data' => $data,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong with backend.',
+            ];
+        }
     }
 }

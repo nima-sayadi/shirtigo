@@ -1,8 +1,8 @@
 <template>
-    <div class="form_message-success w-form-done" tabindex="-1" :style="{ display : display }" role="region" aria-label="Form success">
+    <div class="form_message-success w-form-done" tabindex="-1" :style="{ display : displaySuccess }" role="region" aria-label="Form success">
         <div>Thank you! Your submission has been received!</div>
     </div>
-    <div class="form_message-error w-form-fail" tabindex="-1" role="region" aria-label="Form failure">
+    <div class="form_message-error w-form-fail" tabindex="-1" :style="{ display : displayFail }" role="region" aria-label="Form failure">
         <div>Oops! Something went wrong while submitting the form.</div>
     </div>
 </template>
@@ -12,20 +12,29 @@
     const props = defineProps({
         isFormSubmitted: Boolean,
         isFormReady: Boolean,
+        didOrderFail: Boolean,
     });
 
-    const display = ref("none");
+    const displaySuccess = ref("none");
+    const displayFail = ref("none");
 
     watch(() => props.isFormSubmitted, (newVal) => {
-        if (newVal && props.isFormReady) {
-            display.value = "block";
+        if (newVal && props.isFormReady && props.didOrderFail == false) {
+            displaySuccess.value = "block";
         }
         else {
-            display.value = "none";
+            displaySuccess.value = "none";
         }
     })
 
-    // Could also implement one condition for the error message ...
+    watch(() => props.didOrderFail, (newVal) => {
+        if (newVal && props.isFormReady) {
+            displayFail.value = "block";
+        }
+        else {
+            displayFail.value = "none";
+        }
+    })
 
 </script>
 

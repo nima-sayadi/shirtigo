@@ -66,10 +66,10 @@
                                 <TextField type="text" labelStr="City" :textFieldsObject="textFieldsObject" @update:textFieldsObject="updateTextFieldsObject" />
                                 <SelectField options="country" :isFormReady="isFormReady" v-model:selectedValue="selectedCountry" labelStr="Country" :selectFieldsObject="selectFieldsObject" @callCalculatePrice="calculatePrice" @update:selectFieldsObject="updateSelectFieldsObject" />
                             </form>
-                            <FormMsg :isFormReady="isFormReady" :isFormSubmitted="isFormSubmitted" />
+                            <FormMsg :didOrderFail="didOrderFail" :isFormReady="isFormReady" :isFormSubmitted="isFormSubmitted" />
                         </div>
                     </div>
-                    <CTA :predictedPrice="predictedPrice" :isFormSubmitted="isFormSubmitted" :isFormReady="isFormReady" @callCreateOrder="createOrder" @update:isFormSubmitted="updateIsFormSubmitted" />
+                    <CTA :predictedPrice="predictedPrice" :isFormReady="isFormReady" @callCreateOrder="createOrder" />
                 </div>
             </div>
         </div>
@@ -93,13 +93,14 @@
     const props = defineProps({
         products: Object,
     });
-    const productsData = props.products.data.data || [];
+    const productsData = props.products.data || [];
     const selectedProduct = ref('');
     const selectedColor = ref('');
     const selectedSize = ref('');
     const selectedCountry = ref('');
-    const predictedPrice = ref('0.00');
+    const predictedPrice = ref('0.00 €');
     const isFormSubmitted= ref(false);
+    const didOrderFail= ref(false);
     const sliderFieldsObject = ref({
         widthUserInput : '127',
         offsetxUserInput : '0',
@@ -131,7 +132,7 @@
     const isFormReady = computed(() => {
         let cond1 = Object.entries(textFieldsObject.value).every(([key, value]) => {
             if (key === 'qty') {
-                return value > 1;
+                return value > 0;
             }
             return value !== '';
         });
@@ -159,12 +160,11 @@
             },
             products: [{
                 base_product_sku: selectFieldsObject.value.sku,
-                custom_name: "My product name",
                 amount: Number(textFieldsObject.value.qty),
                 processings: [{
-                    processingarea_type: "front",
+                    processingarea_type: selectFieldsObject.value.processingAreaType,
                     processingposition: "chest-center",
-                    processingmethod: "dtg",
+                    processingmethod: selectFieldsObject.value.processingMethod,
                     design_url: "https://cdn.prod.website-files.com/666ac9ad988798984a18769a/666c4566fcd4e48ef8975664_Logo_Shirtigo_RGB.png",
                     width: Number(sliderFieldsObject.value.widthUserInput),
                     offset_top: Number(sliderFieldsObject.value.offsetyUserInput),
@@ -173,23 +173,51 @@
                     extract_size_and_position: false,
                     ignore_validation : false,
                 }],
-            }]
+            }],
+            fulfillment_mode_key: "24h-express"
         }
     });
 
     function calculatePrice() {
-        // axios.post('/api/predict-price', completeForm.value)
-        // .then(response => {
-        //     console.log('API response:', response.data);
-        // })
-        // .catch(error => {
-        //     console.error('Error during API request:', error);
-        // });
-        predictedPrice.value = "12.50"
+        axios.post('/api/predict-price', completeForm.value)
+        .then(response => {
+            if (response.data.status == 200 || response.data.status == 201){
+                predictedPrice.value = (parseFloat(response.data.data.total_gross_price.amount) / response.data.data.total_gross_price.currency_factor).toFixed(2).toString() + " " + response.data.data.total_gross_price.currency_symbol
+            }
+            else{
+                predictedPrice.value = "Price Calculation N/A"
+            }
+        })
+        .catch(error => {
+            console.error('Error during API request:', error.response.data);
+            predictedPrice.value = "0.00 €"
+        });
     }
 
     function createOrder() {
-        // Axios Req Here
+        isFormSubmitted.value = true
+        axios.post('/api/place-order', completeForm.value)
+        .then(response => {
+            if (response.data.status == 200 || response.data.status == 201){
+                // Redirect to the next page?
+                isFormSubmitted.value = false
+            }
+            else{
+                didOrderFail.value = true
+                isFormSubmitted.value = false
+                setTimeout(() => {
+                    didOrderFail.value = false
+                }, 4000);
+            }
+        })
+        .catch(error => {
+            console.error('Error during API request:', error.response.data);
+            isFormSubmitted.value = false
+            didOrderFail.value = true
+            setTimeout(() => {
+                didOrderFail.value = false
+            }, 4000);
+        });
     }
 
     const updateSelectFieldsObject = (data) => {
@@ -204,10 +232,6 @@
         sliderFieldsObject.value = { ...sliderFieldsObject.value, ...data };
     };
 
-    const updateIsFormSubmitted = (bool) => {
-        isFormSubmitted.value = bool;
-    };
-
     watch(selectedProduct, () => {
         selectedColor.value = '';
         selectedSize.value = '';
@@ -220,7 +244,7 @@
         selectFieldsObject.value.sku = '';
     });
     watch(isFormReady, () => {
-        predictedPrice.value = '0.00';
+        predictedPrice.value = '0.00 €';
     });
     
 

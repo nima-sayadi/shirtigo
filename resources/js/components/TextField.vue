@@ -27,7 +27,7 @@
 
     // The recalculation of price based on quantity change
     watch(() => props.textFieldsObject.qty, (newValue) => {
-        if(props.isFormReady && newValue !== '' && newValue > 1){ // Note that the endpoint requires all information of the form
+        if(props.isFormReady && newValue !== '' && newValue > 0){ // Note that the endpoint requires all information of the form
             emit('callCalculatePrice'); 
         }
     });

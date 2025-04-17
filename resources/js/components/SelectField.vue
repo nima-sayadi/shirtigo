@@ -49,6 +49,8 @@
                     updatedData.maxXOffset = max_Xoffset.toString();
                     updatedData.maxYOffset = max_Yoffset.toString();
                     updatedData.imgURL = element.imgURL;
+                    updatedData.processingAreaType = element.processingAreaType;
+                    updatedData.processingMethod = element.processingMethod;
                     break;
                 }
                 
@@ -101,6 +103,8 @@
                     height: item.processing_areas.data[0].height_in_mm,
                     xOffset: item.processing_areas.data[0].offset_x_center_mm,
                     yOffset: item.processing_areas.data[0].offset_y_collar_mm,
+                    processingAreaType: item.processing_areas.data[0].position_name,
+                    processingMethod: item.processing_areas.data[0].processing_method,
                 }));
 
             case 'color':
