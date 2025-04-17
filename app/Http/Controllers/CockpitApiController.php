@@ -80,7 +80,8 @@ class CockpitApiController extends Controller {
             'products.*.processings.*.ignore_validation' => 'required|boolean',
         ]);
         $response = $this->apiService->createOrder($payload);
-        if($response['status'] == 200){
+        if($response['status'] == 200 || $response['status'] == 201){
+
             event(new OrderWasPlaced($response['data']));
         }
         return $response;
