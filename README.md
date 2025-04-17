@@ -20,4 +20,4 @@ This is a test project done for Shirtigo.
 ## Important!
 - The calculation formula of the Offsets and the width boundries might not be precise and it is purly based on the understanding of the response of the data from `Shirtigo Cockpit API`. No detailed explanation was provided.
 - This repo and task is done simply and I have avoided complications to demonstrate the capablities. If your team's coding style, structuring data and files, are different, it is not an issue and can be adopted.
-- Due to limitations of the Shirtigo API at the time of creating this repo, when selecting products, price calculation for some products might not work (500 err code returned `/orders/predict-price` endpoint) for unknown reasons. This is handled by a replacement text `Price Calculation N/A`. The data however works with `/orders` endpoint, thus, the user can still submit the order.
+- Price calculation for some products might not work (500 err code returned `/orders/predict-price` endpoint) for unknown reasons. This is handled by a replacement text `Price Calculation N/A`. The data however works with `/orders` endpoint, thus, the user can still submit the order.
